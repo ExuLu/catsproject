@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+      crossorigin="anonymous"
+    />
+    <title>Cats</title>
+  </head>
+  <body>
+  
+
+    <div class="px-4 pt-5 my-1 text-center border-bottom">
+      <% if (!locals.error) { %>
+      <h1 class="fs-1 display-4 fw-bold text-body-emphasis">Hi, cat lover</h1>
+      <% } else { %>
+      <h1 class="fs-1 display-4 fw-bold text-body-emphasis">
+        Opps! Something went mrrrrrong!
+      </h1>
+      <% } %>
+      <div class="col-lg-6 mx-auto">
+        <% if (locals.fact) { %>
+        <p class="lead mb-4 fs-5"><%= fact %></p>
+        <% } else { %>
+        <p class="lead my-4 fs-5">Say meow to learn more about cats</p>
+        <% } %>
+        <form action="/meow" method="POST">
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-4">
+                <button class="btn btn-warning btn-lg px-4 me-sm-3">
+                MEOW
+                </button>
+            </div>
+        </form>
+      </div>
+      <div class="overflow-hidden">
+        <div class="container px-5">
+          <% if (!locals.error) { %>
+
+          <img
+            class="d-block mx-auto mb-4"
+            src="https://cataas.com/cat?height=400"
+            alt="cat"
+          />
+          <% } else { %>
+          <img class="d-block mx-auto mb-4" src=<%= error %> alt="cat"> <%
+          } %>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
