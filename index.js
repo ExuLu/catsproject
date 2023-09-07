@@ -18,7 +18,7 @@ const getFact = async function () {
 };
 
 const getImage = async function () {
-  const writer = fs.createWriteStream('./public/images/cat.png');
+  const writer = fs.createWriteStream('./public/cat.png');
   const streamResponse = await axios('https://cataas.com/cat?height=400', {
     method: 'GET',
     responseType: 'stream',
@@ -31,14 +31,14 @@ const getImage = async function () {
 
 app.get('/', async (req, res) => {
   await getImage();
-  setTimeout(() => res.render('index.ejs'), 50);
+  setTimeout(() => res.render('index.ejs'), 500);
 });
 
 app.post('/meow', async (req, res) => {
   try {
     const fact = await getFact();
     await getImage();
-    setTimeout(() => res.render('index.ejs', { fact: fact.text }), 50);
+    setTimeout(() => res.render('index.ejs', { fact: fact.text }), 500);
   } catch (error) {
     res.render('index.ejs', {
       error: `https://http.cat/${error.response.status}`,
