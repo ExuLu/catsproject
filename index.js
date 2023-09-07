@@ -1,6 +1,7 @@
 // import axios and express from node modules
 import express from 'express';
 import axios from 'axios';
+import fs from 'fs';
 
 // create an app and port for backend
 const app = express();
@@ -9,12 +10,24 @@ const port = 3000;
 // use public folder for static files
 app.use(express.static('public'));
 
-const getFact = async function() {
+const getFact = async function () {
   const response = await axios.get('https://cat-fact.herokuapp.com/facts');
   const result = response.data;
-  const fact = result[Math.floor(Math.random()*result.length)];
+  const fact = result[Math.floor(Math.random() * result.length)];
   return fact;
-}
+};
+
+const getImage = async function (url) {
+  const writer = fs.createWriteStream('./public/images/cat.png');
+  const streamResponse = await axios(url, {
+    method: 'GET',
+    responseType: 'stream',
+  });
+  streamResponse.data.pipe(writer);
+
+  writer.on('finish', () => console.log('Done'));
+  writer.on('error', () => console.log('Oops!'));
+};
 
 app.get('/', async (req, res) => {
   res.render('index.ejs');
@@ -22,8 +35,9 @@ app.get('/', async (req, res) => {
 
 app.post('/meow', async (req, res) => {
   try {
-    const fact = await getFact();
-    res.render('index.ejs', { fact: fact.text });
+  const fact = await getFact();
+  await getImage('https://cataas.com/cat?height=400');
+  res.render('index.ejs', { fact: fact.text });
   } catch (error) {
     res.render('index.ejs', {
       error: `https://http.cat/${error.response.status}`,
