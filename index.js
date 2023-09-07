@@ -17,9 +17,9 @@ const getFact = async function () {
   return fact;
 };
 
-const getImage = async function (url) {
+const getImage = async function () {
   const writer = fs.createWriteStream('./public/images/cat.png');
-  const streamResponse = await axios(url, {
+  const streamResponse = await axios('https://cataas.com/cat?height=400', {
     method: 'GET',
     responseType: 'stream',
   });
@@ -30,14 +30,15 @@ const getImage = async function (url) {
 };
 
 app.get('/', async (req, res) => {
-  res.render('index.ejs');
+  await getImage();
+  setTimeout(() => res.render('index.ejs'), 50);
 });
 
 app.post('/meow', async (req, res) => {
   try {
-  const fact = await getFact();
-  await getImage('https://cataas.com/cat?height=400');
-  res.render('index.ejs', { fact: fact.text });
+    const fact = await getFact();
+    await getImage();
+    setTimeout(() => res.render('index.ejs', { fact: fact.text }), 50);
   } catch (error) {
     res.render('index.ejs', {
       error: `https://http.cat/${error.response.status}`,
