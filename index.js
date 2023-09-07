@@ -9,15 +9,20 @@ const port = 3000;
 // use public folder for static files
 app.use(express.static('public'));
 
+const getFact = async function() {
+  const response = await axios.get('https://cat-fact.herokuapp.com/facts');
+  const result = response.data;
+  const fact = result[Math.floor(Math.random()*result.length)];
+  return fact;
+}
+
 app.get('/', async (req, res) => {
   res.render('index.ejs');
 });
 
 app.post('/meow', async (req, res) => {
   try {
-    const response = await axios.get('https://cat-fact.herokuapp.com/facts');
-    const result = response.data;
-    const fact = result[Math.floor(Math.random() * result.length)];
+    const fact = await getFact();
     res.render('index.ejs', { fact: fact.text });
   } catch (error) {
     res.render('index.ejs', {
